@@ -50,7 +50,7 @@ const table = {
         <td>${item.address}</td>
         <td>${item.age}</td>
         <td>
-        <div class="rounded-button delete-button trash-delete-button" data-id=${item.id}>
+        <div class="rounded-button trash-delete-button" data-id=${item.id}>
           <i class="fa-solid fa-trash"></i>
         </div>
         </td>`;
@@ -117,12 +117,18 @@ const deleteHandlers = () => {
       data.deleteContactById(this.getAttribute("data-id"));
     });
   });
+
+  document.querySelectorAll(".trash-delete-button").forEach((button) => {
+    button.addEventListener("click", function () {
+      data.deleteContactInTrash(this.getAttribute("data-id"));
+    });
+  });
 };
 
-function loadInitialContacts() {
+const loadInitialContacts = () => {
   const contacts = data.getContacts();
   renderContact("all", contacts);
-}
+};
 
 function setActiveSidebarLabel(activeLabel) {
   document.querySelectorAll(".sidebar-category-label").forEach((label) => {

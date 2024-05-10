@@ -1,37 +1,23 @@
-const getId = () => {
+const getIdFromQueryParams = () => {
   const params = new URLSearchParams(document.location.search);
   const dataId = params.get("id");
-
   return parseInt(dataId, 10);
 };
 
-const getContact = () => {
-  const contactsData = JSON.parse(localStorage.getItem("contacts") || []);
-  const id = getId();
-
-  const contactIndex = contactsData.findIndex((data) => data.id === id);
-  if (contactIndex !== -1) {
-    console.log(contactsData[contactIndex]);
-  } else {
-    console.log("Kontak tidak ditemukan");
-  }
-
-  return contactsData[contactIndex];
-};
-
-const showDataDOM = () => {
-  const contact = getContact();
+const load = () => {
+  const contactId = getIdFromQueryParams();
+  const contact = data.getContactById(contactId);
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
-      addDataToDOM(contact);
+      renderToDOM(contact);
     });
   } else {
-    addDataToDOM(contact);
+    renderToDOM(contact);
   }
 };
 
-function addDataToDOM(data) {
+function renderToDOM(d) {
   const inputs = {
     name: document.getElementById("name"),
     email: document.getElementById("email"),
@@ -41,7 +27,7 @@ function addDataToDOM(data) {
   };
 
   Object.keys(inputs).forEach((key) => {
-    inputs[key].value = data[key];
+    inputs[key].value = d[key];
   });
 
   const saveButton = document.querySelector(".button-save");
@@ -52,7 +38,7 @@ function addDataToDOM(data) {
     e.preventDefault();
 
     const dataToUpdate = {
-      id: data.id,
+      id: d.id,
       name: inputs.name.value,
       email: inputs.email.value,
       address: inputs.address.value,
@@ -60,24 +46,9 @@ function addDataToDOM(data) {
       age: inputs.age.value,
     };
 
-    updateLocalStorage(dataToUpdate);
+    data.updateById(d.id, dataToUpdate);
     window.location.href = "/";
   }
 }
 
-function updateLocalStorage(updatedData) {
-  const contactsData = JSON.parse(localStorage.getItem("contacts") || "[]");
-  const contactIndex = contactsData.findIndex(
-    (contact) => contact.id === updatedData.id
-  );
-
-  if (contactIndex !== -1) {
-    contactsData[contactIndex] = updatedData;
-    localStorage.setItem("contacts", JSON.stringify(contactsData));
-    console.log("Data berhasil diperbarui");
-  } else {
-    console.log("Kontak tidak ditemukan");
-  }
-}
-
-document.addEventListener("DOMContentLoaded", showDataDOM);
+document.addEventListener("DOMContentLoaded", load);

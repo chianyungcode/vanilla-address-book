@@ -45,12 +45,16 @@ body {
   flex-direction: column;
   row-gap: 1rem;
 }
+
 input {
   border-radius: 10px;
   padding: 4px 8px;
   border: 1px solid #888888;
-  outline-offset: 4px;
-  outline-color: #262626;
+  outline: none;
+}
+
+input:focus {
+  box-shadow: 0 0 0 2px #f13; /* offset hitam */
 }
 
 button {
@@ -77,4 +81,9 @@ button {
 
 .cancel-button:visited {
   color: white;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
 }

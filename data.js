@@ -74,13 +74,20 @@ const data = {
 
     return filteredContacts;
   },
+  getContactById: (id) => {
+    const contacts = data.getContacts();
 
+    const index = contacts.findIndex(
+      (contact) => Number(contact.id) === Number(id)
+    );
+
+    return contacts[index];
+  },
   updateById: (id, updatedData) => {
     const contacts = data.getContacts();
     const index = contacts.findIndex((item) => Number(item.id) === Number(id));
 
-    const updatedContact = {
-      ...contacts[index],
-    };
+    contacts[index] = updatedData;
+    data.setContacts(contacts);
   },
 };
